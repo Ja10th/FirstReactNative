@@ -1,12 +1,15 @@
 import { useState } from "react";
 import {
   Button,
+  FlatList,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
   View,
 } from "react-native";
+import GoalItem from "./components/GoalItem";
+import GoalInput from "./components/GoalInput";
 
 export default function App() {
   const [words, setWords] = useState("");
@@ -16,7 +19,10 @@ export default function App() {
     setWords(enteredText);
   };
   const handleAddGoal = () => {
-    setMyGoals((currentMyGoals) => [...currentMyGoals, words]);
+    setMyGoals((currentMyGoals) => [
+      ...currentMyGoals,
+      { text: words, key: Math.random().toString() },
+    ]);
     setWords("");
   };
 
@@ -27,45 +33,18 @@ export default function App() {
   };
   return (
     <View style={styles.container}>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-around",
-          gap: 3,
-          alignItems: "center",
-          marginBottom: 24,
-          borderBottomWidth: 1,
-          borderBottomColor: "#ccc",
-          flex: 1,
-        }}
-      >
-        <TextInput
-          style={styles.textInput}
-          value={words}
-          placeholder="Enter your goal: "
-          onChangeText={handleGoalInput}
-        />
-        <Button title="Add Goal " onPress={handleAddGoal} />
-      </View>
+      <GoalInput
+        words={words}
+        handleAddGoal={handleAddGoal}
+        handleGoalInput={handleGoalInput}
+      />
       <View style={{ flex: 5 }}>
-        <ScrollView>
-          {myGoals.map((goal, index) => (
-            <View
-              key={index}
-              style={{
-                padding: 12,
-                backgroundColor: "blue",
-                marginBottom: 8,
-                borderRadius: 12,
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
-              <Text style={{ paddingVertical: 2, color: "white" }}>{goal}</Text>
-              <Text onPress={() => handleRemove(index)}>Remove</Text>
-            </View>
-          ))}
-        </ScrollView>
+        <FlatList
+          data={myGoals}
+          renderItem={(itemData) => {
+            return <GoalItem text={itemData.item.text} />;
+          }}
+        />
       </View>
     </View>
   );
@@ -76,12 +55,6 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     paddingHorizontal: 16,
     flex: 1,
-  },
-  textInput: {
-    borderWidth: 1,
-    borderColor: "#cccccc",
-    width: "70%",
-    padding: 8,
-    marginRight: 8,
+    backgroundColor: '#eee'
   },
 });
