@@ -1,13 +1,5 @@
 import { useState } from "react";
-import {
-  Button,
-  FlatList,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import GoalItem from "./components/GoalItem";
 import GoalInput from "./components/GoalInput";
 
@@ -42,7 +34,13 @@ export default function App() {
         <FlatList
           data={myGoals}
           renderItem={(itemData) => {
-            return <GoalItem text={itemData.item.text} />;
+            return (
+              <GoalItem
+                text={itemData.item.text}
+                handleRemove={handleRemove}
+                index={itemData.index}
+              />
+            );
           }}
         />
       </View>
@@ -55,6 +53,6 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     paddingHorizontal: 16,
     flex: 1,
-    backgroundColor: '#eee'
+    backgroundColor: "#eee",
   },
 });
